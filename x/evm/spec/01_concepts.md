@@ -58,7 +58,7 @@ For further reading, please refer to:
 
 ## Ethermint as Geth implementation
 
-Ethermint is an implementation of the [Etherum protocal in Golang](https://geth.ethereum.org/docs/getting-started) (Geth) as a Cosmos SDK module. Geth includes an implementation of the EVM to compute state transitions. Have a look at the [go-etheruem source code](https://github.com/ethereum/go-ethereum/blob/master/core/vm/instructions.go) to see how the EVM opcodes are implemented. Just as Geth can be run as an Ethereum node, Ethermint can be run as a node to compute state transitions with the EVM. Ethermint supports Geth's standard [Ethereum JSON-RPC APIs](https://docs.evmos.org/developers/json-rpc/endpoints.html) in order to be Web3 and EVM compatible.
+Ethermint is an implementation of the [Etherum protocal in Golang](https://geth.ethereum.org/docs/getting-started) (Geth) as a Cosmos SDK module. Geth includes an implementation of the EVM to compute state transitions. Have a look at the [go-etheruem source code](https://github.com/ethereum/go-ethereum/blob/master/core/vm/instructions.go) to see how the EVM opcodes are implemented. Just as Geth can be run as an Ethereum node, Ethermint can be run as a node to compute state transitions with the EVM. Ethermint supports Geth's standard [Ethereum JSON-RPC APIs](https://docs.hap.org/developers/json-rpc/endpoints.html) in order to be Web3 and EVM compatible.
 
 ### JSON-RPC
 
@@ -66,7 +66,7 @@ JSON-RPC is a stateless, lightweight remote procedure call (RPC) protocol. Prima
 
 #### JSON-RPC Example: `eth_call`
 
-The JSON-RPC method [`eth_call`](https://docs.evmos.org/developers/json-rpc/endpoints.html#eth-call) allows you to execute messages against contracts. Usually, you need to send a transaction to a Geth node to include it in the mempool, then nodes gossip between each other and eventually the transaction is included in a block and gets executed. `eth_call` however lets you send data to a contract and see what happens without commiting a transaction.
+The JSON-RPC method [`eth_call`](https://docs.hap.org/developers/json-rpc/endpoints.html#eth-call) allows you to execute messages against contracts. Usually, you need to send a transaction to a Geth node to include it in the mempool, then nodes gossip between each other and eventually the transaction is included in a block and gets executed. `eth_call` however lets you send data to a contract and see what happens without commiting a transaction.
 
 In the Geth implementation, calling the endpoint roughly goes through the following steps:
 
