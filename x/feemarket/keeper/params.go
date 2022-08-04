@@ -3,7 +3,6 @@ package keeper
 import (
 	"math/big"
 
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/hap-advisors/ethermint/x/feemarket/types"
 )
@@ -41,5 +40,5 @@ func (k Keeper) GetBaseFee(ctx sdk.Context) *big.Int {
 
 // SetBaseFee set's the base fee in the paramSpace
 func (k Keeper) SetBaseFee(ctx sdk.Context, baseFee *big.Int) {
-	k.paramSpace.Set(ctx, types.ParamStoreKeyBaseFee, sdkmath.NewIntFromBigInt(baseFee))
+	k.paramSpace.Set(ctx, types.ParamStoreKeyBaseFee, sdk.NewIntFromBigInt(baseFee))
 }

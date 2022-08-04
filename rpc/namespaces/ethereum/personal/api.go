@@ -106,11 +106,7 @@ func (api *PrivateAccountAPI) ListAccounts() ([]common.Address, error) {
 	}
 
 	for _, info := range list {
-		pubKey, err := info.GetPubKey()
-		if err != nil {
-			return nil, err
-		}
-		addrs = append(addrs, common.BytesToAddress(pubKey.Address()))
+		addrs = append(addrs, common.BytesToAddress(info.GetPubKey().Address()))
 	}
 
 	return addrs, nil
@@ -139,11 +135,7 @@ func (api *PrivateAccountAPI) NewAccount(password string) (common.Address, error
 		return common.Address{}, err
 	}
 
-	pubKey, err := info.GetPubKey()
-	if err != nil {
-		return common.Address{}, err
-	}
-	addr := common.BytesToAddress(pubKey.Address().Bytes())
+	addr := common.BytesToAddress(info.GetPubKey().Address().Bytes())
 	api.logger.Info("Your new key was generated", "address", addr.String())
 	api.logger.Info("Please backup your key file!", "path", os.Getenv("HOME")+"/.ethermint/"+name) // TODO: pass the correct binary
 	api.logger.Info("Please remember your password!")

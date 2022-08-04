@@ -5,7 +5,6 @@ import (
 	"math/big"
 	"strings"
 
-	sdkmath "cosmossdk.io/math"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
@@ -47,7 +46,7 @@ var _ = Describe("Feemarket", func() {
 
 			Context("during CheckTx", func() {
 				It("should reject transactions with gasPrice < MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(2)
+					gasPrice := sdk.NewInt(2)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -57,7 +56,7 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should accept transactions with gasPrice >= MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(3)
+					gasPrice := sdk.NewInt(3)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
@@ -65,7 +64,7 @@ var _ = Describe("Feemarket", func() {
 
 			Context("during DeliverTx", func() {
 				It("should reject transactions with gasPrice < MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(2)
+					gasPrice := sdk.NewInt(2)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -75,7 +74,7 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should accept transactions with gasPrice >= MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(3)
+					gasPrice := sdk.NewInt(3)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
@@ -89,7 +88,7 @@ var _ = Describe("Feemarket", func() {
 
 			Context("during CheckTx", func() {
 				It("should reject transactions with gasPrice < min-gas-prices", func() {
-					gasPrice := sdkmath.NewInt(2)
+					gasPrice := sdk.NewInt(2)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -99,7 +98,7 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should accept transactions with gasPrice >= MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(3)
+					gasPrice := sdk.NewInt(3)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
@@ -107,7 +106,7 @@ var _ = Describe("Feemarket", func() {
 
 			Context("during DeliverTx", func() {
 				It("should reject transactions with gasPrice < MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(2)
+					gasPrice := sdk.NewInt(2)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -117,7 +116,7 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should accept transactions with gasPrice >= MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(3)
+					gasPrice := sdk.NewInt(3)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
@@ -130,7 +129,7 @@ var _ = Describe("Feemarket", func() {
 			})
 			Context("during CheckTx", func() {
 				It("should reject transactions with gasPrice < MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(2)
+					gasPrice := sdk.NewInt(2)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -140,7 +139,7 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should reject transactions with MinGasPrices < gasPrice < min-gas-prices", func() {
-					gasPrice := sdkmath.NewInt(4)
+					gasPrice := sdk.NewInt(4)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -150,7 +149,7 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should accept transactions with gasPrice > min-gas-prices", func() {
-					gasPrice := sdkmath.NewInt(5)
+					gasPrice := sdk.NewInt(5)
 					res := checkTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
@@ -158,7 +157,7 @@ var _ = Describe("Feemarket", func() {
 
 			Context("during DeliverTx", func() {
 				It("should reject transactions with gasPrice < MinGasPrices", func() {
-					gasPrice := sdkmath.NewInt(2)
+					gasPrice := sdk.NewInt(2)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
 					Expect(
@@ -168,13 +167,13 @@ var _ = Describe("Feemarket", func() {
 				})
 
 				It("should accept transactions with MinGasPrices < gasPrice < than min-gas-prices", func() {
-					gasPrice := sdkmath.NewInt(4)
+					gasPrice := sdk.NewInt(4)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
 
 				It("should accept transactions with gasPrice >= min-gas-prices", func() {
-					gasPrice := sdkmath.NewInt(5)
+					gasPrice := sdk.NewInt(5)
 					res := deliverTx(privKey, &gasPrice, &msg)
 					Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
 				})
@@ -205,7 +204,7 @@ var _ = Describe("Feemarket", func() {
 				// 100000`. With the fee calculation `Fee = (baseFee + tip) * gasLimit`,
 				// a `minGasPrices = 40_000_000_000` results in `minGlobalFee =
 				// 4000000000000000`
-				privKey, _ = setupTestWithContext("1", sdk.NewDec(minGasPrices), sdkmath.NewInt(baseFee))
+				privKey, _ = setupTestWithContext("1", sdk.NewDec(minGasPrices), sdk.NewInt(baseFee))
 			})
 
 			Context("during CheckTx", func() {
@@ -231,6 +230,7 @@ var _ = Describe("Feemarket", func() {
 						// Note that max priority fee per gas can't be higher than the max fee per gas (gasFeeCap), i.e. 30_000_000_000)
 						return txParams{nil, big.NewInt(minGasPrices - 10_000_000_000), big.NewInt(30_000_000_000), &ethtypes.AccessList{}}
 					}),
+
 					Entry("dynamic tx with GasFeeCap > MinGasPrices, EffectivePrice < MinGasPrices", func() txParams {
 						return txParams{nil, big.NewInt(minGasPrices + 10_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
 					}),
@@ -297,144 +297,143 @@ var _ = Describe("Feemarket", func() {
 					}),
 				)
 			})
-		})
 
-		Context("with MinGasPrices (feemarket param) < BaseFee (feemarket)", func() {
-			var (
-				baseFee      int64
-				minGasPrices int64
-			)
-
-			BeforeEach(func() {
-				baseFee = 10_000_000_000
-				minGasPrices = baseFee - 5_000_000_000
-
-				// Note that the tests run the same transactions with `gasLimit =
-				// 100_000`. With the fee calculation `Fee = (baseFee + tip) * gasLimit`,
-				// a `minGasPrices = 5_000_000_000` results in `minGlobalFee =
-				// 500_000_000_000_000`
-				privKey, _ = setupTestWithContext("1", sdk.NewDec(minGasPrices), sdkmath.NewInt(baseFee))
-			})
-
-			Context("during CheckTx", func() {
-				DescribeTable("should reject transactions with gasPrice < MinGasPrices",
-					func(malleate getprices) {
-						p := malleate()
-						to := tests.GenerateAddress()
-						msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
-						res := checkEthTx(privKey, msgEthereumTx)
-						Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
-						Expect(
-							strings.Contains(res.GetLog(),
-								"provided fee < minimum global fee"),
-						).To(BeTrue(), res.GetLog())
-					},
-					Entry("legacy tx", func() txParams {
-						return txParams{big.NewInt(minGasPrices - 1_000_000_000), nil, nil, nil}
-					}),
-					Entry("dynamic tx with GasFeeCap < MinGasPrices, no gasTipCap", func() txParams {
-						return txParams{nil, big.NewInt(minGasPrices - 1_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
-					}),
-					Entry("dynamic tx with GasFeeCap < MinGasPrices, max gasTipCap", func() txParams {
-						return txParams{nil, big.NewInt(minGasPrices - 1_000_000_000), big.NewInt(minGasPrices - 1_000_000_000), &ethtypes.AccessList{}}
-					}),
+			Context("with MinGasPrices (feemarket param) < BaseFee (feemarket)", func() {
+				var (
+					baseFee      int64
+					minGasPrices int64
 				)
 
-				DescribeTable("should reject transactions with MinGasPrices < tx gasPrice < EffectivePrice",
-					func(malleate getprices) {
-						p := malleate()
-						to := tests.GenerateAddress()
-						msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
-						res := checkEthTx(privKey, msgEthereumTx)
-						Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
-						Expect(
-							strings.Contains(res.GetLog(),
-								"insufficient fee"),
-						).To(BeTrue(), res.GetLog())
-					},
-					Entry("legacy tx", func() txParams {
-						return txParams{big.NewInt(baseFee - 1_000_000_000), nil, nil, nil}
-					}),
-					Entry("dynamic tx", func() txParams {
-						return txParams{nil, big.NewInt(baseFee - 1_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
-					}),
-				)
+				BeforeEach(func() {
+					baseFee = 10_000_000_000
+					minGasPrices = baseFee - 5_000_000_000
 
-				DescribeTable("should accept transactions with gasPrice >= EffectivePrice",
-					func(malleate getprices) {
-						p := malleate()
-						to := tests.GenerateAddress()
-						msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
-						res := checkEthTx(privKey, msgEthereumTx)
-						Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
-					},
-					Entry("legacy tx", func() txParams {
-						return txParams{big.NewInt(baseFee), nil, nil, nil}
-					}),
-					Entry("dynamic tx", func() txParams {
-						return txParams{nil, big.NewInt(baseFee), big.NewInt(0), &ethtypes.AccessList{}}
-					}),
-				)
-			})
+					// Note that the tests run the same transactions with `gasLimit =
+					// 100_000`. With the fee calculation `Fee = (baseFee + tip) * gasLimit`,
+					// a `minGasPrices = 5_000_000_000` results in `minGlobalFee =
+					// 500_000_000_000_000`
+					privKey, _ = setupTestWithContext("1", sdk.NewDec(minGasPrices), sdk.NewInt(baseFee))
+				})
 
-			Context("during DeliverTx", func() {
-				DescribeTable("should reject transactions with gasPrice < MinGasPrices",
-					func(malleate getprices) {
+				Context("during CheckTx", func() {
+					DescribeTable("should reject transactions with gasPrice < MinGasPrices",
+						func(malleate getprices) {
+							p := malleate()
+							to := tests.GenerateAddress()
+							msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
+							res := checkEthTx(privKey, msgEthereumTx)
+							Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
+							Expect(
+								strings.Contains(res.GetLog(),
+									"provided fee < minimum global fee"),
+							).To(BeTrue(), res.GetLog())
+						},
+						Entry("legacy tx", func() txParams {
+							return txParams{big.NewInt(minGasPrices - 1_000_000_000), nil, nil, nil}
+						}),
+						Entry("dynamic tx with GasFeeCap < MinGasPrices, no gasTipCap", func() txParams {
+							return txParams{nil, big.NewInt(minGasPrices - 1_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
+						}),
+						Entry("dynamic tx with GasFeeCap < MinGasPrices, max gasTipCap", func() txParams {
+							return txParams{nil, big.NewInt(minGasPrices - 1_000_000_000), big.NewInt(minGasPrices - 1_000_000_000), &ethtypes.AccessList{}}
+						}),
+					)
 
-						p := malleate()
-						to := tests.GenerateAddress()
-						msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
-						res := deliverEthTx(privKey, msgEthereumTx)
-						Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
-						Expect(
-							strings.Contains(res.GetLog(),
-								"provided fee < minimum global fee"),
-						).To(BeTrue(), res.GetLog())
-					},
-					Entry("legacy tx", func() txParams {
-						return txParams{big.NewInt(minGasPrices - 1_000_000_000), nil, nil, nil}
-					}),
-					Entry("dynamic tx", func() txParams {
-						return txParams{nil, big.NewInt(minGasPrices - 1_000_000_000), nil, &ethtypes.AccessList{}}
-					}),
-				)
+					DescribeTable("should reject transactions with MinGasPrices < tx gasPrice < EffectivePrice",
+						func(malleate getprices) {
+							p := malleate()
+							to := tests.GenerateAddress()
+							msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
+							res := checkEthTx(privKey, msgEthereumTx)
+							Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
+							Expect(
+								strings.Contains(res.GetLog(),
+									"insufficient fee"),
+							).To(BeTrue(), res.GetLog())
+						},
+						Entry("legacy tx", func() txParams {
+							return txParams{big.NewInt(baseFee - 1_000_000_000), nil, nil, nil}
+						}),
+						Entry("dynamic tx", func() txParams {
+							return txParams{nil, big.NewInt(baseFee - 1_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
+						}),
+					)
 
-				DescribeTable("should reject transactions with MinGasPrices < gasPrice < EffectivePrice",
-					func(malleate getprices) {
-						p := malleate()
-						to := tests.GenerateAddress()
-						msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
-						res := deliverEthTx(privKey, msgEthereumTx)
-						Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
-						Expect(
-							strings.Contains(res.GetLog(),
-								"insufficient fee"),
-						).To(BeTrue(), res.GetLog())
-					},
-					// Note that the baseFee is not 10_000_000_000 anymore but updates to 8_750_000_000 because of the s.Commit
-					Entry("legacy tx", func() txParams {
-						return txParams{big.NewInt(baseFee - 2_000_000_000), nil, nil, nil}
-					}),
-					Entry("dynamic tx", func() txParams {
-						return txParams{nil, big.NewInt(baseFee - 2_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
-					}),
-				)
+					DescribeTable("should accept transactions with gasPrice >= EffectivePrice",
+						func(malleate getprices) {
+							p := malleate()
+							to := tests.GenerateAddress()
+							msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
+							res := checkEthTx(privKey, msgEthereumTx)
+							Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
+						},
+						Entry("legacy tx", func() txParams {
+							return txParams{big.NewInt(baseFee), nil, nil, nil}
+						}),
+						Entry("dynamic tx", func() txParams {
+							return txParams{nil, big.NewInt(baseFee), big.NewInt(0), &ethtypes.AccessList{}}
+						}),
+					)
+				})
 
-				DescribeTable("should accept transactions with gasPrice >= EffectivePrice",
-					func(malleate getprices) {
-						p := malleate()
-						to := tests.GenerateAddress()
-						msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
-						res := deliverEthTx(privKey, msgEthereumTx)
-						Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
-					},
-					Entry("legacy tx", func() txParams {
-						return txParams{big.NewInt(baseFee), nil, nil, nil}
-					}),
-					Entry("dynamic tx", func() txParams {
-						return txParams{nil, big.NewInt(baseFee), big.NewInt(0), &ethtypes.AccessList{}}
-					}),
-				)
+				Context("during DeliverTx", func() {
+					DescribeTable("should reject transactions with gasPrice < MinGasPrices",
+						func(malleate getprices) {
+							p := malleate()
+							to := tests.GenerateAddress()
+							msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
+							res := deliverEthTx(privKey, msgEthereumTx)
+							Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
+							Expect(
+								strings.Contains(res.GetLog(),
+									"provided fee < minimum global fee"),
+							).To(BeTrue(), res.GetLog())
+						},
+						Entry("legacy tx", func() txParams {
+							return txParams{big.NewInt(minGasPrices - 1_000_000_000), nil, nil, nil}
+						}),
+						Entry("dynamic tx", func() txParams {
+							return txParams{nil, big.NewInt(minGasPrices - 1_000_000_000), nil, &ethtypes.AccessList{}}
+						}),
+					)
+
+					DescribeTable("should reject transactions with MinGasPrices < gasPrice < EffectivePrice",
+						func(malleate getprices) {
+							p := malleate()
+							to := tests.GenerateAddress()
+							msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
+							res := deliverEthTx(privKey, msgEthereumTx)
+							Expect(res.IsOK()).To(Equal(false), "transaction should have failed")
+							Expect(
+								strings.Contains(res.GetLog(),
+									"insufficient fee"),
+							).To(BeTrue(), res.GetLog())
+						},
+						// Note that the baseFee is not 10_000_000_000 anymore but updates to 8_750_000_000 because of the s.Commit
+						Entry("legacy tx", func() txParams {
+							return txParams{big.NewInt(baseFee - 2_000_000_000), nil, nil, nil}
+						}),
+						Entry("dynamic tx", func() txParams {
+							return txParams{nil, big.NewInt(baseFee - 2_000_000_000), big.NewInt(0), &ethtypes.AccessList{}}
+						}),
+					)
+
+					DescribeTable("should accept transactions with gasPrice >= EffectivePrice",
+						func(malleate getprices) {
+							p := malleate()
+							to := tests.GenerateAddress()
+							msgEthereumTx := buildEthTx(privKey, &to, p.gasPrice, p.gasFeeCap, p.gasTipCap, p.accesses)
+							res := deliverEthTx(privKey, msgEthereumTx)
+							Expect(res.IsOK()).To(Equal(true), "transaction should have succeeded", res.GetLog())
+						},
+						Entry("legacy tx", func() txParams {
+							return txParams{big.NewInt(baseFee), nil, nil, nil}
+						}),
+						Entry("dynamic tx", func() txParams {
+							return txParams{nil, big.NewInt(baseFee), big.NewInt(0), &ethtypes.AccessList{}}
+						}),
+					)
+				})
 			})
 		})
 	})
@@ -442,7 +441,7 @@ var _ = Describe("Feemarket", func() {
 
 // setupTestWithContext sets up a test chain with an example Cosmos send msg,
 // given a local (validator config) and a gloabl (feemarket param) minGasPrice
-func setupTestWithContext(valMinGasPrice string, minGasPrice sdk.Dec, baseFee sdkmath.Int) (*ethsecp256k1.PrivKey, banktypes.MsgSend) {
+func setupTestWithContext(valMinGasPrice string, minGasPrice sdk.Dec, baseFee sdk.Int) (*ethsecp256k1.PrivKey, banktypes.MsgSend) {
 	privKey, msg := setupTest(valMinGasPrice + s.denom)
 	params := types.DefaultParams()
 	params.MinGasPrice = minGasPrice
@@ -457,7 +456,7 @@ func setupTest(localMinGasPrices string) (*ethsecp256k1.PrivKey, banktypes.MsgSe
 	setupChain(localMinGasPrices)
 
 	privKey, address := generateKey()
-	amount, ok := sdkmath.NewIntFromString("10000000000000000000")
+	amount, ok := sdk.NewIntFromString("10000000000000000000")
 	s.Require().True(ok)
 	initBalance := sdk.Coins{sdk.Coin{
 		Denom:  s.denom,
@@ -470,7 +469,7 @@ func setupTest(localMinGasPrices string) (*ethsecp256k1.PrivKey, banktypes.MsgSe
 		ToAddress:   address.String(),
 		Amount: sdk.Coins{sdk.Coin{
 			Denom:  s.denom,
-			Amount: sdkmath.NewInt(10000),
+			Amount: sdk.NewInt(10000),
 		}},
 	}
 	s.Commit()
@@ -494,7 +493,7 @@ func setupChain(localMinGasPricesStr string) {
 		baseapp.SetMinGasPrices(localMinGasPricesStr),
 	)
 
-	genesisState := app.NewTestGenesisState(newapp.AppCodec())
+	genesisState := app.NewDefaultGenesisState()
 	genesisState[types.ModuleName] = newapp.AppCodec().MustMarshalJSON(types.DefaultGenesisState())
 
 	stateBytes, err := json.MarshalIndent(genesisState, "", "  ")
@@ -568,7 +567,6 @@ func prepareEthTx(priv *ethsecp256k1.PrivKey, msgEthereumTx *evmtypes.MsgEthereu
 	err = msgEthereumTx.Sign(s.ethSigner, tests.NewSigner(priv))
 	s.Require().NoError(err)
 
-	msgEthereumTx.From = ""
 	err = txBuilder.SetMsgs(msgEthereumTx)
 	s.Require().NoError(err)
 
@@ -576,7 +574,7 @@ func prepareEthTx(priv *ethsecp256k1.PrivKey, msgEthereumTx *evmtypes.MsgEthereu
 	s.Require().NoError(err)
 
 	evmDenom := s.app.EvmKeeper.GetParams(s.ctx).EvmDenom
-	fees := sdk.Coins{{Denom: evmDenom, Amount: sdkmath.NewIntFromBigInt(txData.Fee())}}
+	fees := sdk.Coins{{Denom: evmDenom, Amount: sdk.NewIntFromBigInt(txData.Fee())}}
 	builder.SetFeeAmount(fees)
 	builder.SetGasLimit(msgEthereumTx.GetGas())
 
@@ -601,7 +599,7 @@ func deliverEthTx(priv *ethsecp256k1.PrivKey, msgEthereumTx *evmtypes.MsgEthereu
 	return res
 }
 
-func prepareCosmosTx(priv *ethsecp256k1.PrivKey, gasPrice *sdkmath.Int, msgs ...sdk.Msg) []byte {
+func prepareCosmosTx(priv *ethsecp256k1.PrivKey, gasPrice *sdk.Int, msgs ...sdk.Msg) []byte {
 	encodingConfig := encoding.MakeConfig(app.ModuleBasics)
 	accountAddress := sdk.AccAddress(priv.PubKey().Address().Bytes())
 
@@ -609,7 +607,7 @@ func prepareCosmosTx(priv *ethsecp256k1.PrivKey, gasPrice *sdkmath.Int, msgs ...
 
 	txBuilder.SetGasLimit(1000000)
 	if gasPrice == nil {
-		_gasPrice := sdkmath.NewInt(1)
+		_gasPrice := sdk.NewInt(1)
 		gasPrice = &_gasPrice
 	}
 	fees := &sdk.Coins{{Denom: s.denom, Amount: gasPrice.MulRaw(1000000)}}
@@ -660,14 +658,14 @@ func prepareCosmosTx(priv *ethsecp256k1.PrivKey, gasPrice *sdkmath.Int, msgs ...
 	return bz
 }
 
-func checkTx(priv *ethsecp256k1.PrivKey, gasPrice *sdkmath.Int, msgs ...sdk.Msg) abci.ResponseCheckTx {
+func checkTx(priv *ethsecp256k1.PrivKey, gasPrice *sdk.Int, msgs ...sdk.Msg) abci.ResponseCheckTx {
 	bz := prepareCosmosTx(priv, gasPrice, msgs...)
 	req := abci.RequestCheckTx{Tx: bz}
 	res := s.app.BaseApp.CheckTx(req)
 	return res
 }
 
-func deliverTx(priv *ethsecp256k1.PrivKey, gasPrice *sdkmath.Int, msgs ...sdk.Msg) abci.ResponseDeliverTx {
+func deliverTx(priv *ethsecp256k1.PrivKey, gasPrice *sdk.Int, msgs ...sdk.Msg) abci.ResponseDeliverTx {
 	bz := prepareCosmosTx(priv, gasPrice, msgs...)
 	req := abci.RequestDeliverTx{Tx: bz}
 	res := s.app.BaseApp.DeliverTx(req)

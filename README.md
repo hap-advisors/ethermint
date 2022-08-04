@@ -44,7 +44,7 @@ Ethermint is a scalable and interoperable Ethereum library, built on Proof-of-St
 
 ## Installation
 
-For prerequisites and detailed build instructions please read the hap [Installation](https://hap.dev/quickstart/installation.html) instructions. Once the dependencies are installed, run:
+For prerequisites and detailed build instructions please read the Evmos [Installation](https://evmos.dev/quickstart/installation.html) instructions. Once the dependencies are installed, run:
 
 ```bash
 make install
@@ -54,7 +54,7 @@ Or check out the latest [release](https://github.com/hap-advisors/ethermint/rele
 
 ## Quick Start
 
-To learn how the Ethermint works from a high-level perspective, go to the [Introduction](https://hap.dev/intro/overview.html) section from the documentation. You can also check the instructions to [Run a Node](https://hap.dev/quickstart/run_node.html).
+To learn how the Ethermint works from a high-level perspective, go to the [Introduction](https://evmos.dev/intro/overview.html) section from the documentation. You can also check the instructions to [Run a Node](https://evmos.dev/quickstart/run_node.html).
 
 For an example on how Ethermint can be used on any Cosmos-SDK chain, please refer to [Evmos](https://www.github.com/tharsis/evmos).
 
@@ -62,9 +62,9 @@ For an example on how Ethermint can be used on any Cosmos-SDK chain, please refe
 
 The following chat channels and forums are a great spot to ask questions about Ethermint:
 
-- [hap Twitter](https://twitter.com/hapOrg)
-- [hap Discord](https://discord.gg/trje9XuAmy)
-- [hap Telegram](https://t.me/hapOrg)
+- [Evmos Twitter](https://twitter.com/EvmosOrg)
+- [Evmos Discord](https://discord.gg/trje9XuAmy)
+- [Evmos Telegram](https://t.me/EvmosOrg)
 - [Tharsis Twitter](https://twitter.com/TharsisHQ)
 
 ## Contributing
@@ -75,4 +75,4 @@ For additional instructions, standards and style guides, please refer to the [Co
 
 ## Careers
 
-See our open positions on [Cosmos Jobs](https://jobs.cosmos.network/project/hap-d0sk1uxuh-remote/), [Notion](https://tharsis.notion.site), or feel free to [reach out](mailto:careers@thars.is) via email.
+See our open positions on [Cosmos Jobs](https://jobs.cosmos.network/project/evmos-d0sk1uxuh-remote/), [Notion](https://tharsis.notion.site), or feel free to [reach out](mailto:careers@thars.is) via email.

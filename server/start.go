@@ -33,12 +33,13 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	pruningtypes "github.com/cosmos/cosmos-sdk/pruning/types"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/server/api"
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 	servergrpc "github.com/cosmos/cosmos-sdk/server/grpc"
 	"github.com/cosmos/cosmos-sdk/server/types"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	ethdebug "github.com/hap-advisors/ethermint/rpc/namespaces/ethereum/debug"
 	"github.com/hap-advisors/ethermint/server/config"
@@ -136,8 +137,9 @@ which accepts a path for the resulting pprof file.
 	cmd.Flags().Bool(server.FlagInterBlockCache, true, "Enable inter-block caching")
 	cmd.Flags().String(srvflags.CPUProfile, "", "Enable CPU profiling and write to the provided file")
 	cmd.Flags().Bool(server.FlagTrace, false, "Provide full stack traces for errors in ABCI Log")
-	cmd.Flags().String(server.FlagPruning, pruningtypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
+	cmd.Flags().String(server.FlagPruning, storetypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
 	cmd.Flags().Uint64(server.FlagPruningKeepRecent, 0, "Number of recent heights to keep on disk (ignored if pruning is not 'custom')")
+	cmd.Flags().Uint64(server.FlagPruningKeepEvery, 0, "Offset heights to keep on disk after 'keep-every' (ignored if pruning is not 'custom')")
 	cmd.Flags().Uint64(server.FlagPruningInterval, 0, "Height interval at which pruned heights are removed from disk (ignored if pruning is not 'custom')")
 	cmd.Flags().Uint(server.FlagInvCheckPeriod, 0, "Assert registered invariants every N blocks")
 	cmd.Flags().Uint64(server.FlagMinRetainBlocks, 0, "Minimum block height offset during ABCI commit to prune Tendermint blocks")
@@ -183,7 +185,7 @@ func startStandAlone(ctx *server.Context, appCreator types.AppCreator) error {
 	transport := ctx.Viper.GetString(srvflags.Transport)
 	home := ctx.Viper.GetString(flags.FlagHome)
 
-	db, err := openDB(home, server.GetAppDBBackend(ctx.Viper))
+	db, err := openDB(home)
 	if err != nil {
 		return err
 	}
@@ -258,7 +260,7 @@ func startInProcess(ctx *server.Context, clientCtx client.Context, appCreator ty
 	}
 
 	traceWriterFile := ctx.Viper.GetString(srvflags.TraceStore)
-	db, err := openDB(home, server.GetAppDBBackend(ctx.Viper))
+	db, err := openDB(home)
 	if err != nil {
 		logger.Error("failed to open DB", "error", err.Error())
 		return err
@@ -361,7 +363,7 @@ func startInProcess(ctx *server.Context, clientCtx client.Context, appCreator ty
 		grpcWebSrv *http.Server
 	)
 	if config.GRPC.Enable {
-		grpcSrv, err = servergrpc.StartGRPCServer(clientCtx, app, config.GRPC)
+		grpcSrv, err = servergrpc.StartGRPCServer(clientCtx, app, config.GRPC.Address)
 		if err != nil {
 			return err
 		}
@@ -475,9 +477,9 @@ func startInProcess(ctx *server.Context, clientCtx client.Context, appCreator ty
 	return server.WaitForQuitSignals()
 }
 
-func openDB(rootDir string, backendType dbm.BackendType) (dbm.DB, error) {
+func openDB(rootDir string) (dbm.DB, error) {
 	dataDir := filepath.Join(rootDir, "data")
-	return dbm.NewDB("application", backendType, dataDir)
+	return sdk.NewLevelDB("application", dataDir)
 }
 
 func openTraceWriter(traceWriterFile string) (w io.Writer, err error) {

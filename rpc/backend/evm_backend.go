@@ -103,13 +103,7 @@ func (b *Backend) GetBlockByHash(hash common.Hash, fullTx bool) (map[string]inte
 		return nil, nil
 	}
 
-	res, err := b.EthBlockFromTendermint(resBlock, blockRes, fullTx)
-	if err != nil {
-		b.logger.Debug("EthBlockFromTendermint failed", "hash", hash, "error", err.Error())
-		return nil, err
-	}
-
-	return res, nil
+	return b.EthBlockFromTendermint(resBlock, blockRes, fullTx)
 }
 
 // BlockByNumber returns the block identified by number.
@@ -183,8 +177,7 @@ func (b *Backend) EthBlockFromTm(resBlock *tmrpctypes.ResultBlock, blockRes *tmr
 	return ethBlock, nil
 }
 
-// GetTendermintBlockByNumber returns a Tendermint formatted block for a given
-// block number
+// GetTendermintBlockByNumber returns a Tendermint format block by block number
 func (b *Backend) GetTendermintBlockByNumber(blockNum types.BlockNumber) (*tmrpctypes.ResultBlock, error) {
 	height := blockNum.Int64()
 	if height <= 0 {
@@ -246,8 +239,7 @@ func (b *Backend) BlockBloom(blockRes *tmrpctypes.ResultBlockResults) (ethtypes.
 	return ethtypes.Bloom{}, errors.New("block bloom event is not found")
 }
 
-// EthBlockFromTendermint returns a JSON-RPC compatible Ethereum block from a
-// given Tendermint block and its block result.
+// EthBlockFromTendermint returns a JSON-RPC compatible Ethereum block from a given Tendermint block and its block result.
 func (b *Backend) EthBlockFromTendermint(
 	resBlock *tmrpctypes.ResultBlock,
 	blockRes *tmrpctypes.ResultBlockResults,
@@ -862,9 +854,8 @@ func (b *Backend) SuggestGasTipCap(baseFee *big.Int) (*big.Int, error) {
 func (b *Backend) BaseFee(blockRes *tmrpctypes.ResultBlockResults) (*big.Int, error) {
 	// return BaseFee if London hard fork is activated and feemarket is enabled
 	res, err := b.queryClient.BaseFee(types.ContextWithHeight(blockRes.Height), &evmtypes.QueryBaseFeeRequest{})
-	if err != nil || res.BaseFee == nil {
-		// we can't tell if it's london HF not enabled or the state is pruned,
-		// in either case, we'll fallback to parsing from begin blocker event,
+	if err != nil {
+		// fallback to parsing from begin blocker event, could happen on pruned nodes.
 		// faster to iterate reversely
 		for i := len(blockRes.BeginBlockEvents) - 1; i >= 0; i-- {
 			evt := blockRes.BeginBlockEvents[i]
@@ -990,22 +981,17 @@ func (b *Backend) FeeHistory(
 	return &feeHistory, nil
 }
 
-// GetEthereumMsgsFromTendermintBlock returns all real MsgEthereumTxs from a
-// Tendermint block. It also ensures consistency over the correct txs indexes
-// across RPC endpoints
-func (b *Backend) GetEthereumMsgsFromTendermintBlock(
-	resBlock *tmrpctypes.ResultBlock,
-	blockRes *tmrpctypes.ResultBlockResults,
-) []*evmtypes.MsgEthereumTx {
+// GetEthereumMsgsFromTendermintBlock returns all real MsgEthereumTxs from a Tendermint block.
+// It also ensures consistency over the correct txs indexes across RPC endpoints
+func (b *Backend) GetEthereumMsgsFromTendermintBlock(resBlock *tmrpctypes.ResultBlock, blockRes *tmrpctypes.ResultBlockResults) []*evmtypes.MsgEthereumTx {
 	var result []*evmtypes.MsgEthereumTx
 	block := resBlock.Block
 
 	txResults := blockRes.TxsResults
 
 	for i, tx := range block.Txs {
-		// Check if tx exists on EVM by cross checking with blockResults:
-		//  - Include unsuccessful tx that exceeds block gas limit
-		//  - Exclude unsuccessful tx with any other error but ExceedBlockGasLimit
+		// check tx exists on EVM by cross checking with blockResults
+		// include the tx that exceeds block gas limit
 		if !TxSuccessOrExceedsBlockGasLimit(txResults[i]) {
 			b.logger.Debug("invalid tx result code", "cosmos-hash", hexutil.Encode(tx.Hash()))
 			continue
@@ -1023,7 +1009,6 @@ func (b *Backend) GetEthereumMsgsFromTendermintBlock(
 				continue
 			}
 
-			ethMsg.Hash = ethMsg.AsTransaction().Hash().Hex()
 			result = append(result, ethMsg)
 		}
 	}

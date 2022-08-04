@@ -1,23 +1,17 @@
-package client
+package keys
 
 import (
-	"bufio"
-
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/keys"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 	"github.com/tendermint/tendermint/libs/cli"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	clientkeys "github.com/hap-advisors/ethermint/client/keys"
-	"github.com/hap-advisors/ethermint/crypto/hd"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+
+	"github.com/cosmos/cosmos-sdk/client/keys"
 )
 
-// KeyCommands registers a sub-tree of commands to interact with
+// Commands registers a sub-tree of commands to interact with
 // local private key storage.
-func KeyCommands(defaultNodeHome string) *cobra.Command {
+func Commands(defaultNodeHome string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "keys",
 		Short: "Manage your application's keys",
@@ -45,22 +39,9 @@ The pass backend requires GnuPG: https://gnupg.org/
 `,
 	}
 
-	// support adding Ethereum supported keys
-	addCmd := keys.AddKeyCommand()
-
-	// update the default signing algorithm value to "eth_secp256k1"
-	algoFlag := addCmd.Flag("algo")
-	algoFlag.DefValue = string(hd.EthSecp256k1Type)
-	err := algoFlag.Value.Set(string(hd.EthSecp256k1Type))
-	if err != nil {
-		panic(err)
-	}
-
-	addCmd.RunE = runAddCmd
-
 	cmd.AddCommand(
 		keys.MnemonicKeyCommand(),
-		addCmd,
+		AddKeyCommand(),
 		keys.ExportKeyCommand(),
 		keys.ImportKeyCommand(),
 		keys.ListKeysCmd(),
@@ -69,36 +50,12 @@ The pass backend requires GnuPG: https://gnupg.org/
 		keys.DeleteKeyCommand(),
 		keys.ParseKeyStringCommand(),
 		keys.MigrateCommand(),
-		flags.LineBreak,
-		UnsafeExportEthKeyCommand(),
-		UnsafeImportKeyCommand(),
 	)
 
 	cmd.PersistentFlags().String(flags.FlagHome, defaultNodeHome, "The application home directory")
 	cmd.PersistentFlags().String(flags.FlagKeyringDir, "", "The client Keyring directory; if omitted, the default 'home' directory will be used")
-	cmd.PersistentFlags().String(flags.FlagKeyringBackend, keyring.BackendOS, "Select keyring's backend (os|file|test)")
+	cmd.PersistentFlags().String(flags.FlagKeyringBackend, flags.DefaultKeyringBackend, "Select keyring's backend (os|file|test)")
 	cmd.PersistentFlags().String(cli.OutputFlag, "text", "Output format (text|json)")
+
 	return cmd
-}
-
-func runAddCmd(cmd *cobra.Command, args []string) error {
-	buf := bufio.NewReader(cmd.InOrStdin())
-	clientCtx := client.GetClientContextFromCmd(cmd)
-
-	var (
-		kr  keyring.Keyring
-		err error
-	)
-
-	dryRun, _ := cmd.Flags().GetBool(flags.FlagDryRun)
-	if dryRun {
-		kr, err = keyring.New(sdk.KeyringServiceName(), keyring.BackendMemory, clientCtx.KeyringDir, buf, hd.EthSecp256k1Option())
-		clientCtx = clientCtx.WithKeyring(kr)
-	}
-
-	if err != nil {
-		return err
-	}
-
-	return clientkeys.RunAddCmd(clientCtx, cmd, args, buf)
 }

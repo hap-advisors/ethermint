@@ -21,12 +21,15 @@ func DecodeTxResponse(in []byte) (*MsgEthereumTxResponse, error) {
 		return nil, err
 	}
 
-	if len(txMsgData.MsgResponses) == 0 {
+	data := txMsgData.GetData()
+	if len(data) == 0 {
 		return &MsgEthereumTxResponse{}, nil
 	}
 
 	var res MsgEthereumTxResponse
-	if err := proto.Unmarshal(txMsgData.MsgResponses[0].Value, &res); err != nil {
+
+	err := proto.Unmarshal(data[0].GetData(), &res)
+	if err != nil {
 		return nil, sdkerrors.Wrap(err, "failed to unmarshal tx response message data")
 	}
 
@@ -38,7 +41,7 @@ func EncodeTransactionLogs(res *TransactionLogs) ([]byte, error) {
 	return proto.Marshal(res)
 }
 
-// DecodeTransactionLogs decodes an protobuf-encoded byte slice into TransactionLogs
+// DecodeTxResponse decodes an protobuf-encoded byte slice into TransactionLogs
 func DecodeTransactionLogs(data []byte) (TransactionLogs, error) {
 	var logs TransactionLogs
 	err := proto.Unmarshal(data, &logs)
@@ -59,9 +62,7 @@ func UnwrapEthereumMsg(tx *sdk.Tx, ethHash common.Hash) (*MsgEthereumTx, error) 
 		if !ok {
 			return nil, fmt.Errorf("invalid tx type: %T", tx)
 		}
-		txHash := ethMsg.AsTransaction().Hash()
-		ethMsg.Hash = txHash.Hex()
-		if txHash == ethHash {
+		if ethMsg.AsTransaction().Hash() == ethHash {
 			return ethMsg, nil
 		}
 	}

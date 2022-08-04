@@ -5,7 +5,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -30,10 +29,10 @@ type Keeper struct {
 	// - storing account's Code
 	// - storing transaction Logs
 	// - storing Bloom filters by block height. Needed for the Web3 API.
-	storeKey storetypes.StoreKey
+	storeKey sdk.StoreKey
 
 	// key to access the transient store, which is reset on every block during Commit
-	transientKey storetypes.StoreKey
+	transientKey sdk.StoreKey
 
 	// module specific parameter space that can be configured through governance
 	paramSpace paramtypes.Subspace
@@ -59,7 +58,7 @@ type Keeper struct {
 // NewKeeper generates new evm module keeper
 func NewKeeper(
 	cdc codec.BinaryCodec,
-	storeKey, transientKey storetypes.StoreKey, paramSpace paramtypes.Subspace,
+	storeKey, transientKey sdk.StoreKey, paramSpace paramtypes.Subspace,
 	ak types.AccountKeeper, bankKeeper types.BankKeeper, sk types.StakingKeeper,
 	fmk types.FeeMarketKeeper,
 	tracer string,

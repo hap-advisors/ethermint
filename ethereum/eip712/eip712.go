@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"strings"
 
-	sdkmath "cosmossdk.io/math"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
@@ -380,7 +379,7 @@ var (
 	hashType      = reflect.TypeOf(common.Hash{})
 	addressType   = reflect.TypeOf(common.Address{})
 	bigIntType    = reflect.TypeOf(big.Int{})
-	cosmIntType   = reflect.TypeOf(sdkmath.Int{})
+	cosmIntType   = reflect.TypeOf(sdk.Int{})
 	cosmosAnyType = reflect.TypeOf(&codectypes.Any{})
 )
 

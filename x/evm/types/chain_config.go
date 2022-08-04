@@ -4,8 +4,6 @@ import (
 	"math/big"
 	"strings"
 
-	sdkmath "cosmossdk.io/math"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -33,8 +31,7 @@ func (cc ChainConfig) EthereumConfig(chainID *big.Int) *params.ChainConfig {
 		BerlinBlock:             getBlockValue(cc.BerlinBlock),
 		LondonBlock:             getBlockValue(cc.LondonBlock),
 		ArrowGlacierBlock:       getBlockValue(cc.ArrowGlacierBlock),
-		GrayGlacierBlock:        getBlockValue(cc.GrayGlacierBlock),
-		MergeNetsplitBlock:      getBlockValue(cc.MergeNetsplitBlock),
+		MergeForkBlock:          getBlockValue(cc.MergeForkBlock),
 		TerminalTotalDifficulty: nil,
 		Ethash:                  nil,
 		Clique:                  nil,
@@ -56,8 +53,7 @@ func DefaultChainConfig() ChainConfig {
 	berlinBlock := sdk.ZeroInt()
 	londonBlock := sdk.ZeroInt()
 	arrowGlacierBlock := sdk.ZeroInt()
-	grayGlacierBlock := sdk.ZeroInt()
-	mergeNetsplitBlock := sdk.ZeroInt()
+	mergeForkBlock := sdk.ZeroInt()
 
 	return ChainConfig{
 		HomesteadBlock:      &homesteadBlock,
@@ -75,12 +71,11 @@ func DefaultChainConfig() ChainConfig {
 		BerlinBlock:         &berlinBlock,
 		LondonBlock:         &londonBlock,
 		ArrowGlacierBlock:   &arrowGlacierBlock,
-		GrayGlacierBlock:    &grayGlacierBlock,
-		MergeNetsplitBlock:  &mergeNetsplitBlock,
+		MergeForkBlock:      &mergeForkBlock,
 	}
 }
 
-func getBlockValue(block *sdkmath.Int) *big.Int {
+func getBlockValue(block *sdk.Int) *big.Int {
 	if block == nil || block.IsNegative() {
 		return nil
 	}
@@ -133,11 +128,8 @@ func (cc ChainConfig) Validate() error {
 	if err := validateBlock(cc.ArrowGlacierBlock); err != nil {
 		return sdkerrors.Wrap(err, "arrowGlacierBlock")
 	}
-	if err := validateBlock(cc.GrayGlacierBlock); err != nil {
-		return sdkerrors.Wrap(err, "GrayGlacierBlock")
-	}
-	if err := validateBlock(cc.MergeNetsplitBlock); err != nil {
-		return sdkerrors.Wrap(err, "MergeNetsplitBlock")
+	if err := validateBlock(cc.MergeForkBlock); err != nil {
+		return sdkerrors.Wrap(err, "mergeForkBlock")
 	}
 
 	// NOTE: chain ID is not needed to check config order
@@ -155,7 +147,7 @@ func validateHash(hex string) error {
 	return nil
 }
 
-func validateBlock(block *sdkmath.Int) error {
+func validateBlock(block *sdk.Int) error {
 	// nil value means that the fork has not yet been applied
 	if block == nil {
 		return nil

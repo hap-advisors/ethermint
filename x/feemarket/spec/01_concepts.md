@@ -14,7 +14,7 @@ Before EIP-1559 the transaction fee is calculated with
 fee = gasPrice * gasLimit
 ```
 
-, where `gasPrice` is the price per gas and `gasLimit` describes the amount of gas required to perform the transaction. The more complex operations a transaction requires, the higher the gasLimit (See [Executing EVM bytecode](https://docs.hap.org/modules/evm/01_concepts.html#executing-evm-bytecode)). To submit a transaction, the signer needs to specify the `gasPrice`.
+, where `gasPrice` is the price per gas and `gasLimit` describes the amount of gas required to perform the transaction. The more complex operations a transaction requires, the higher the gasLimit (See [Executing EVM bytecode](https://docs.evmos.org/modules/evm/01_concepts.html#executing-evm-bytecode)). To submit a transaction, the signer needs to specify the `gasPrice`.
 
 With EIP-1559 enabled, the transaction fee is calculated with
 
@@ -24,10 +24,6 @@ fee = (baseFee + priorityTip) * gasLimit
 
 , where `baseFee` is the fixed-per-block network fee per gas and `priorityTip` is an additional fee per gas that can be set optionally. Note, that both the base fee and the priority tip are a gas prices. To submit a transaction with EIP-1559, the signer needs to specify the `gasFeeCap` a maximum fee per gas they are willing to pay total and optionally the `priorityTip` , which covers both the priority fee and the block's network fee per gas (aka: base fee).
 
-::: tip
-The Cosmos SDK uses a different terminology for `gas` than Ethereum. What is called `gasLimit` on Ethereum is called `gasWanted` on Cosmos. You might encounter both terminologies on hap since it builds Ethereum on top of the SDK, e.g. when using different wallets like Keplr for Cosmos and Metamask for Ethereum.
-:::
-
 ## Base Fee
 
 The base fee per gas (aka base fee) is a global gas price defined at the consensus level. It is stored as a module parameter and is adjusted at the end of each block based on the total gas used in the previous block and gas target (`block gas limit / elasticity multiplier`):
@@ -35,7 +31,7 @@ The base fee per gas (aka base fee) is a global gas price defined at the consens
 - it increases when blocks are above the gas target,
 - it decreases when blocks are below the gas target.
 
-Instead of burning the base fee (as implemented on Ethereum), the `feemarket` module allocates the base fee for regular [Cosmos SDK fee distribution](https://docs.hap.org/modules/distribution/).
+Instead of burning the base fee (as implemented on Ethereum), the `feemarket` module allocates the base fee for regular [Cosmos SDK fee distribution](https://docs.evmos.org/modules/distribution/).
 
 ## Priority Tip
 
